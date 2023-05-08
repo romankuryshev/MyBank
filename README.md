@@ -1,1 +1,1 @@
-# MyBank
+# Web application for bank
