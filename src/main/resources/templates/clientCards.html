@@ -1,0 +1,171 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Дебетовые карты</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <!--     <link rel="stylesheet" href="css/header.css"/>-->
+    <!--  <link rel="stylesheet" type="text/css" href="/static/css/header2.css" th:href="@{/css/header2.css}"/>-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/Архив/cardsOld.css" th:href="@{/css/cards.css}"/>
+    <style>
+
+    </style>
+</head>
+
+<body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+        crossorigin="anonymous"></script>
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">MyBank</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="/"> Главная </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/cards"> Карты </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/deposits"> Вклады </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/credits"> Кредиты </a>
+                </li>
+            </ul>
+            <form class="d-flex" role="search">
+                <a href="/login" class="btn btn-outline-dark" th:if="${user == null}"> Войти </a>
+                <a href="/profile" class="btn btn-outline-dark " th:if="${user != null}"> Личный кабинет </a>
+            </form>
+        </div>
+    </div>
+</nav>
+<!-- конец header -->
+
+<div class="container-lg">
+
+    <div class="d-flex justify-content-center align-items-center border-bottom my-3">
+        <figure class="text-center w-75">
+            <blockquote class="blockquote fs-3">
+                <p>Оформите банковскую карту прямо сейчас и получите доступ к удобным и безопасным платежным возможностям.</p>
+            </blockquote>
+            <figcaption class="blockquote-footer fs-5">
+                <cite title="Title">Не упустите возможность получить все преимущества банковской карты уже сегодня!</cite>
+            </figcaption>
+        </figure>
+    </div>
+
+    <div class=" d-flex flex-wrap m-4">
+        <div class="card my-2 mx-3 shadow-sm" th:each="card, state : ${cardsInfo}" style="width: 30%;">
+            <div th:switch="${state.index} % 3">
+                <img th:case="0" th:src="@{/images/cardimg2.png}" class="card-img-top" alt="...">
+                <img th:case="1" th:src="@{/images/cardimg1.png}" class="card-img-top" alt="...">
+                <img th:case="2" th:src="@{/images/cardimg3.png}" class="card-img-top" alt="...">
+            </div>
+
+            <div class="card-body d-flex justify-content-between flex-column">
+                <div>
+                    <h5 class="card-title" th:text="${card.name}"/>
+                    <p class="card-text" th:text="${card.description}"/>
+
+                    <div class="d-flex flex-wrap m-auto justify-content-left">
+                        <div>
+                            <img src="/images/reshot-icon-capital-investment-YM6WR95A32.svg" style="width: 7%">
+                            <span class="ml-auto" th:text="${card.cashBackPercent} + '% кешбэка'"></span>
+                        </div>
+
+                        <div>
+                            <img src="/images/reshot-icon-wallet-ALN3T89FH4.svg" style="width: 7%">
+                            <span class="mx-auto" th:text="'Лимит ' + ${card.operationsLimit} + ' ₽ '"> </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lower-row d-flex justify-content-between ">
+                    <div>
+                        <span class="card-price" th:text="${card.price} + ' ₽'"></span>
+                        <span>/мес</span>
+                    </div>
+                    <div class="d-flex">
+                        <button type="button" data-bs-toggle="modal" th:data-bs-target="'#submitDeposit' + ${card.cardId}" class="btn btn-primary">Оформить</button>
+                    </div>
+                </div>
+
+                <!--Модальное окно-->
+                <div class="modal fade" th:id="'submitDeposit' + ${card.cardId}" tabindex="-1" aria-labelledby="submitDeposit" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title display-5" id="submitDepositLabel">Оформить карту</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <h3 class="display-6" th:text="${card.name}"></h3>
+
+                                <h6 class="card-text">
+                                    <span class="fs-6 fw-light fst-italic text-body-secondary mb-0">Кешбэк: </span>
+                                    <span th:text="' ' + ${card.cashBackPercent} + '%'"></span>
+                                </h6>
+
+                                <h6 class="card-text">
+                                    <span class="fs-6 fw-light fst-italic text-body-secondary mb-0">Лимит на переводы: </span>
+                                    <span th:text="' ' + ${card.operationsLimit} + ' ₽ '"></span>
+                                </h6>
+
+                                <h6 class="card-text">
+                                    <span class="fs-6 fw-light fst-italic text-body-secondary mb-0">Стоимость обслуживания: </span>
+                                    <span th:text="' ' + ${card.price} + ' ₽'"></span>
+                                </h6>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Назад</button>
+                                <form th:id="${card.cardId}" action="/cards/orderingCard/submit" method="post">
+                                    <input type="hidden" name="cardInfo" th:value="${card.cardId}"/>
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                    <button type="submit" class="btn btn-primary">Открыть</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--Модальное окно-->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    var prevForm = null;
+    var repeat = false;
+
+    function show(id) {
+
+        if (prevForm != null) {
+            for (var i = 0; i < prevForm.elements.length; i++) {
+                prevForm.elements[i].style.display = "none";
+            }
+        }
+
+        var currentForm = document.getElementById(id);
+        if (prevForm !== currentForm || repeat === true) {
+            repeat = false;
+            for (var i = 0; i < currentForm.elements.length; i++) {
+                currentForm.elements[i].style.display = "block";
+            }
+        } else {
+            repeat = true;
+        }
+        prevForm = currentForm;
+    }
+</script>
+</body>
+</html>

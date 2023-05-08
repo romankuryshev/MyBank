@@ -1,0 +1,118 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&family=Sora:wght@400;500;600;700;800&display=swap');
+
+h1, h2, h3, h4, h5, h6{
+    margin: 0;
+}
+
+body{
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+html, body {
+    height: 100%;
+}
+
+.header{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 3%;
+}
+
+.authorization{
+    justify-self: center;
+    width: 30%;
+}
+
+.main__form{
+    margin-top: 2%;
+}
+
+.warnings{
+    display: flex;
+    justify-content: center;
+}
+
+.warning{
+    color: #c72929;
+    font-size: 14px;
+}
+
+.form__input{
+    display: block;
+    width: calc(92% - 2px);
+    height: calc(1.5em + 0.75rem + 2px);
+    padding: 1% 4%;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+.button{
+    margin-top: 4%;
+    display: block;
+    width: 100%;
+    height: 50%;
+    padding: 2% 4%;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #fc6554;
+    color: #fc6554;
+    border-radius: 0.25rem;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out, color .15s ease-in-out, background-color .15s ease-in-out;
+    cursor: pointer;
+}
+
+.button:hover{
+    background-color: #fc6554;
+    color: #524858;
+    border-color: #524858;
+}
+
+.reg_ref{
+    font-size: 14px;
+    margin-top: 2%;
+    display: flex;
+    justify-content: center;
+}
+
+a{
+    color: #495057;
+}
+/*конец логин*/
+
+/*начало регистрация (+ общие теги выще)*/
+.authorization__reg{
+    width: 40%;
+}
+
+.reg__form{
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 3%;
+}
+
+.left__block{
+    width: 48%;
+    margin-right: 4%;
+}
+
+.right__block{
+    width: 48%;
+}
+
+.reg__input{
+    margin-bottom: 2%;
+}

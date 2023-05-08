@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Creator: CorelDRAW -->
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="2048px" height="2048px" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+viewBox="0 0 2048 2048"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <style type="text/css">
+   <![CDATA[
+    .fil0 {fill:none}
+    .fil2 {fill:#212121}
+    .fil1 {fill:#212121;fill-rule:nonzero}
+   ]]>
+  </style>
+ </defs>
+ <g id="Layer_x0020_1">
+  <metadata id="CorelCorpID_0Corel-Layer"/>
+  <rect class="fil0" width="2048" height="2048"/>
+  <g id="_445075104">
+   <rect id="_445084200" class="fil0" x="255.996" y="255.996" width="1536" height="1536"/>
+   <path id="_445082040" class="fil1" d="M379.999 575.998l1288 0c25.3323,0 48.3414,10.3417 64.9997,27 16.6583,16.6583 27,39.6674 27,64.9997l0 712.003c0,25.3323 -10.3417,48.3414 -27,64.9997 -16.6583,16.6583 -39.6674,27 -64.9997,27l-1288 0c-25.3323,0 -48.3414,-10.3417 -64.9997,-27 -16.6583,-16.6583 -27,-39.6674 -27,-64.9997l0 -712.003c0,-25.3323 10.3417,-48.3414 27,-64.9997 16.6583,-16.6583 39.6674,-27 64.9997,-27zm1288 64.0016l-1288 0c-7.66654,0 -14.6599,3.15945 -19.7492,8.24883 -5.08937,5.08937 -8.24883,12.0827 -8.24883,19.7492l0 712.003c0,7.66654 3.15945,14.6599 8.24883,19.7492 5.08937,5.08937 12.0827,8.24883 19.7492,8.24883l1288 0c7.66654,0 14.6599,-3.15945 19.7492,-8.24883 5.08937,-5.08937 8.24883,-12.0827 8.24883,-19.7492l0 -712.003c0,-7.66654 -3.15945,-14.6599 -8.24883,-19.7492 -5.08937,-5.08937 -12.0827,-8.24883 -19.7492,-8.24883z"/>
+   <polygon id="_445081056" class="fil1" points="351.599,927.999 1696.4,927.999 1696.4,992 351.599,992 "/>
+   <circle id="_445073232" class="fil2" cx="518.644" cy="793.356" r="70.6431"/>
+   <circle id="_445073304" class="fil2" cx="633.357" cy="793.356" r="70.6431"/>
+   <polygon id="_445080576" class="fil1" points="1376,1248 1568,1248 1568,1312 1376,1312 "/>
+  </g>
+ </g>
+</svg>

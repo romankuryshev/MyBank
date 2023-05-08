@@ -1,0 +1,488 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Личный кабинет</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <!--     <link rel="stylesheet" href="css/header.css"/>-->
+    <!--    <link rel="stylesheet" type="text/css" href="/static/css/header2.css" th:href="@{/css/header2.css}"/>-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/Архив/cardsOld.css" th:href="@{/css/cards.css}"/>
+    <style>
+
+    </style>
+</head>
+
+<body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+        crossorigin="anonymous"></script>
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">MyBank</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="/"> Главная </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/cards"> Карты </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/deposits"> Вклады </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/credits"> Кредиты </a>
+                </li>
+                <li th:if="${admin} == true" class="nav-item">
+                    <a class="nav-link" href="/admin/control-panel"> Панель администратора </a>
+                </li>
+            </ul>
+            <form th:action="@{/logout}" method="post">
+                <input class="btn btn-outline-dark" type="submit" value="Выйти"/>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<!--Header-->
+
+<div class="container-lg">
+
+    <div class="accordion" id="accordionPanelsStayOpenExample">
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true"
+                        aria-controls="panelsStayOpen-collapseOne">
+                    <span class="display-6">Мои Карты</span>
+                </button>
+            </h2>
+            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
+                <div class="accordion-body">
+                    <!--Раздел мои карты начало-->
+
+                    <div class=" d-flex flex-wrap mx-4 mt-2">
+                        <div th:each="card : ${userCards}" class="card mx-3 my-2 pr-1 shadow-sm">
+                            <div class="card-header d-flex bg-color-white align-items-center">
+                                <h5 th:text="${card.cardInfo.name}"></h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <img class="d-inline" src="/images/reshot-icon-credit-card-XJURV5ATBK.svg"
+                                         style="width: 5%; height: auto;" alt="img"/>
+                                    <!--                                    <h6 class="card-subtitle mx-1 text-body-secondary" th:text="${card.cardNumber}">-->
+                                    <span th:each="letter, state : ${card.cardNumber.toCharArray()}">
+                                        <span th:if="${state.index} % 4 == 0">&nbsp</span><span
+                                            th:text="${letter}"></span>
+                                    </span>
+                                    <!--                                    </h6>-->
+                                </div>
+
+                                <p class="card-text card-price" th:text="${card.balance}  + ' ₽'"/>
+                                <!--                                <a class="btn btn-primary" th:attr="onclick=|show('${card.cardNumber}')|">Перевести</a>-->
+                                <div class="d-flex justify-content-between">
+                                    <div class="btn-group" role="group">
+                                        <button th:id="'transfer' + ${card.cardNumber} + 'button'" type="button"
+                                                class="btn btn-primary" data-bs-toggle="modal"
+                                                th:data-bs-target="'#transfer' + ${card.cardNumber}">
+                                            Перевести
+                                        </button>
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                th:data-bs-target="'#info' + ${card.cardNumber}">
+                                            Информация
+                                        </button>
+                                    </div>
+                                    <button th:id="'delete' + ${card.cardNumber} + 'button'" type="button"
+                                            class="btn btn-secondary" data-bs-toggle="modal"
+                                            th:data-bs-target="'#delete' + ${card.cardNumber}">
+                                        Удалить
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!--Модальное окно перевод-->
+                            <div class="modal fade" th:id="'transfer' + ${card.cardNumber}" tabindex="-1"
+                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <form class="modal-content" action="/profile" method="post">
+
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5">Перевод по номеру карты</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <div>
+                                                <div th:if="${cardMessage} == ('transfer' + ${card.cardNumber})" th:switch="${message}">
+                                                    <div th:case="'Выполнено успешно!'" class="alert alert-success"
+                                                         role="alert" th:text="${message}"></div>
+                                                    <div th:case="*" class="alert alert-danger" role="alert"
+                                                         th:text="${message}"></div>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <input required class="form-control" name="amount" type="text"
+                                                       placeholder="Введите сумму"
+                                                       oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                                                <input required class="form-control" name="cardNumberRecipient"
+                                                       type="text" placeholder="Номер карты получателя"
+                                                       oninput="this.value = this.value.replace(/[^0-9.]/g, '')">
+                                                <input type="hidden" th:name="${_csrf.parameterName}"
+                                                       th:value="${_csrf.token}"/>
+                                                <input type="hidden" name="currentCard" th:value="${card.cardNumber}">
+                                            </div>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                Назад
+                                            </button>
+                                            <button class="btn btn-primary" type="submit">Подтвердить</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <!--Модальное окно перевод конец-->
+
+                            <!--Модальное окно информация-->
+                            <div class="modal fade" th:id="'info' + ${card.cardNumber}" tabindex="-1"
+                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <form class="modal-content" action="/profile" method="post">
+
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5">Информация о карте</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <div>
+                                                <h3 class="display-6" th:text="${card.cardInfo.name}"></h3>
+
+                                                <h6 class="card-text">
+                                                    <span class="fs-6 fw-light fst-italic text-body-secondary mb-0">Кешбэк: </span>
+                                                    <span th:text="' ' + ${card.cardInfo.cashBackPercent} + ' %'"></span>
+                                                </h6>
+
+                                                <h6 class="card-text">
+                                                    <span class="fs-6 fw-light fst-italic text-body-secondary mb-0">Лимит на переводы: </span>
+                                                    <span th:text="' ' + ${card.cardInfo.operationsLimit} + ' ₽ '"></span>
+                                                </h6>
+
+                                                <h6 class="card-text">
+                                                    <span class="fs-6 fw-light fst-italic text-body-secondary mb-0">Стоимость обслуживания: </span>
+                                                    <span th:text="' ' + ${card.cardInfo.price} + ' ₽'"></span>
+                                                </h6>
+                                                <h6 class="card-text">
+                                                    <span class="fs-6 fw-light fst-italic text-body-secondary mb-0">CVC код: </span>
+                                                    <span th:text="' ' + ${card.cvcCode}"></span>
+                                                </h6>
+                                                <h6 class="card-text">
+                                                    <span class="fs-6 fw-light fst-italic text-body-secondary mb-0">Траты за месяц: </span>
+                                                    <span th:text="' ' + ${card.spendingForMonth} + ' ₽'"></span>
+                                                </h6>
+                                            </div>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                Назад
+                                            </button>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+                            <!--Модальное окно информация конец-->
+
+                            <!-- подтвердить удаление -->
+                            <div class="modal fade" th:id="'delete' + ${card.cardNumber}" tabindex="-1"
+                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Удаление карты</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div>
+                                                <div th:if="${cardMessage} == ('delete' + ${card.cardNumber})" th:switch="${message}">
+                                                    <div th:case="'Выполнено успешно!'" class="alert alert-success"
+                                                         role="alert" th:text="${message}"></div>
+                                                    <div th:case="*" class="alert alert-danger" role="alert"
+                                                         th:text="${message}"></div>
+                                                </div>
+                                            </div>
+                                            Вы действительно хотите удалить карту?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                Назад
+                                            </button>
+                                            <form method="post" action="/profile/delete-card">
+                                                <button type="submit" class="btn btn-primary">Подтвердить</button>
+                                                <input type="hidden" name="cardNumber" th:value="${card.cardNumber}"/>
+                                                <input type="hidden" th:name="${_csrf.parameterName}"
+                                                       th:value="${_csrf.token}"/>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- подтвердить удаление конец-->
+                        </div>
+                    </div>
+                </div>
+                <!--Раздел мои карты конец-->
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button id="myAccordion2" class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false"
+                        aria-controls="panelsStayOpen-collapseTwo">
+                    <span class="display-6">Мои вклады </span>
+                </button>
+            </h2>
+            <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
+                <div class="accordion-body">
+                    <!-- Раздел мои вклады-->
+
+                    <div class="d-flex flex-wrap mx-4 mt-2 mb - 5">
+                        <div th:each="deposit : ${userDeposits}" class="card m-3 shadow-sm" style="width: 47%">
+                            <h5 th:text="${deposit.depositInfo.name}" class="card-header"></h5>
+                            <div class="card-body">
+                                <h6 th:text="${deposit.balance} + ' ₽'" class="card-title"></h6>
+                                <div class="card-text">Следующее начисление <span
+                                        th:text="${deposit.nextUpdateDate}"></span></div>
+                                <div class="card-text">Минимальный остаток за месяц: <span
+                                        th:text="${deposit.minBalance}"></span></div>
+                                <div class="card-text">Действителен до <span th:text="${deposit.endDate}"></span></div>
+
+                                <div class="d-flex justify-content-between">
+                                    <div class="btn-group" role="group">
+                                        <button th:id="'topUpDeposit' + ${deposit.depId} +'button'" type="button" data-bs-toggle="modal"
+                                                th:data-bs-target="'#chooseCard' + ${deposit.depId}"
+                                                class="btn btn-primary">
+                                            Пополнить
+                                        </button>
+                                        <button th:id="'chooseDepositTransf' + ${deposit.depId} + 'button'" type="button"
+                                                data-bs-toggle="modal"
+                                                th:data-bs-target="'#chooseDepositTransf' + ${deposit.depId}"
+                                                class="btn btn-primary">
+                                            Перевести
+                                        </button>
+                                    </div>
+
+                                    <button th:id="'deleteDeposit' + 52 + 'button'" type="button"
+                                            class="btn btn-secondary" data-bs-toggle="modal"
+                                            th:data-bs-target="'#deleteDeposit' + 52">
+                                        Удалить
+                                    </button>
+                                </div>
+                            </div>
+                            <!--модальное окно выбора карты для пополнения вклада-->
+                            <div class="modal fade" th:id="'chooseCard' + ${deposit.depId}" tabindex="-1"
+                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <form method="post" action="/profile/top-up" class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Выберите карту</h5>
+                                        </div>
+
+                                        <div class="modal-body ">
+                                            <div th:if="${cardMessage} == ('topUpDeposit' + ${deposit.depId})" th:switch="${message}">
+                                                <div th:case="'Выполнено успешно!'" class="alert alert-success"
+                                                     role="alert" th:text="${message}"></div>
+                                                <div th:case="*" class="alert alert-danger" role="alert"
+                                                     th:text="${message}"></div>
+                                            </div>
+                                            <div class="d-flex justify-content-center">
+                                                <div>
+                                                    <div th:each="card : ${userCards}" class="card border-primary mb-3"
+                                                         style="max-width: 18rem;">
+                                                        <div th:text="${card.cardInfo.name}" class="card-header"></div>
+                                                        <div class="card-body">
+                                                            <h5 th:text="${card.cardNumber}" class="card-title"></h5>
+                                                            <p class="card-text" th:text="${card.balance}  + ' ₽'"></p>
+                                                        </div>
+                                                        <div class="card-footer">
+                                                            <input type="radio" class="btn-check" name="cardNumber"
+                                                                   th:value="${card.cardNumber}"
+                                                                   th:id="'primary-outlined' + ${card.cardNumber} + ${deposit.depId}"
+                                                                   autocomplete="off" required>
+                                                            <label class="btn btn-outline-primary"
+                                                                   th:for="'primary-outlined' + ${card.cardNumber} + ${deposit.depId}">Выбрать</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <input th:id="'depositSum' + ${deposit.depId}"
+                                                   name="depositSum"
+                                                   placeholder="Введите сумму"
+                                                   type="text"
+                                                   class="form-control"
+                                                   aria-label="Sizing example input"
+                                                   aria-describedby="inputGroup-sizing-sm"
+                                                   required
+                                                   oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                Назад
+                                            </button>
+                                            <input type="hidden" th:name="${_csrf.parameterName}"
+                                                   th:value="${_csrf.token}"/>
+                                            <input type="hidden" name="depositId" th:value="${deposit.depId}">
+                                            <button type="submit" class="btn btn-primary">Подтвердить</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <!--модальное окно выбора карты для пополнения вклада конец-->
+
+
+                            <!--модальное окно выбора карты для перевода вклада-->
+                            <div class="modal fade" th:id="'chooseDepositTransf' + ${deposit.depId}" tabindex="-1"
+                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+
+                                    <form method="post" action="/profile/depositTransfer" class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Выберите карту</h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div th:if="${cardMessage} == ('chooseDepositTransf' + ${deposit.depId})" th:switch="${message}">
+                                                <div th:case="'Выполнено успешно!'" class="alert alert-success"
+                                                     role="alert" th:text="${message}"></div>
+                                                <div th:case="*" class="alert alert-danger" role="alert"
+                                                     th:text="${message}"></div>
+                                            </div>
+                                            <div class="d-flex justify-content-center">
+                                                <div>
+                                                    <div th:each="card : ${userCards}" class="card border-primary mb-3"
+                                                         style="max-width: 18rem;">
+                                                        <div th:text="${card.cardInfo.name}" class="card-header">
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <h5 th:text="${card.cardNumber}" class="card-title"></h5>
+                                                            <p class="card-text" th:text="${card.balance}  + ' ₽'"></p>
+                                                        </div>
+                                                        <div class="card-footer">
+                                                            <input type="radio" class="btn-check" name="cardNumber"
+                                                                   th:value="${card.cardNumber}"
+                                                                   th:id="'depositTransfer' + ${card.cardNumber} + ${deposit.depId}"
+                                                                   autocomplete="off" required>
+                                                            <label class="btn btn-outline-primary"
+                                                                   th:for="'depositTransfer' + ${card.cardNumber} + ${deposit.depId}">Выбрать</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <input th:id="'depositTransferSum' + ${deposit.depId}"
+                                                   name="depositSum"
+                                                   placeholder="Введите сумму"
+                                                   type="text"
+                                                   class="form-control"
+                                                   aria-label="Sizing example input"
+                                                   aria-describedby="inputGroup-sizing-sm"
+                                                   required
+                                                   oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                Назад
+                                            </button>
+                                            <input type="hidden" th:name="${_csrf.parameterName}"
+                                                   th:value="${_csrf.token}"/>
+                                            <input type="hidden" name="depositId" th:value="${deposit.depId}">
+                                            <button type="submit" class="btn btn-primary">Подтвердить</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <!--модальное окно выбора карты для перевода вклада-->
+
+                            <!-- подтвердить удаление вклада-->
+                            <div class="modal fade" th:id="'deleteDeposit' + ${deposit.depId}" tabindex="-1"
+                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5">Закрытие вклада</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div th:if="${cardMessage} == ('deleteDeposit' + ${deposit.depId})" class="alert alert-danger" role="alert" th:text="${message}"></div>
+                                            Вы действительно хотите закрыть вклад?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                Назад
+                                            </button>
+                                            <form method="post" action="/profile/delete-deposit">
+                                                <button type="submit" class="btn btn-primary">Подтвердить</button>
+                                                <input type="hidden" name="depId" th:value="${deposit.depId}"/>
+                                                <input type="hidden" th:name="${_csrf.parameterName}"
+                                                       th:value="${_csrf.token}"/>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- подтвердить удаление вклада конец-->
+                        </div>
+                    </div>
+                    <!-- Раздел мои вклады конец-->
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button id="myAccordion3" class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false"
+                        aria-controls="panelsStayOpen-collapseThree">
+                    <span class="display-6">Мои кредиты </span>
+                </button>
+            </h2>
+            <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse">
+                <div class="accordion-body">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    window.addEventListener('load', () => {
+        console.log([[${message}]]);
+        console.log([[${cardMessage}]]);
+        console.log([[${cardMessage}]] + 'button');
+        console.log([[${message}]]);
+
+        if ([[${message}]] != null && [[${cardMessage}]] != null) {
+
+            if([[${cardMessage}]].includes('Deposit')){
+                var acc2 = document.getElementById('myAccordion2');
+                acc2.click();
+                console.log('accordion');
+            }
+
+            var modal = document.getElementById([[${cardMessage}]] + 'button');
+            modal.click();
+            console.log("clicked");
+        }
+    })
+</script>
+</body>
+</html>

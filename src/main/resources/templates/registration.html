@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/login.css" th:href="@{/css/login.css}"/>
+</head>
+<body>
+
+<div class="authorization authorization__reg">
+  <div class="header">
+    <h1> Регистрация </h1>
+  </div>
+
+  <div class="warnings">
+    <p class="warning" th:if="${message} != null" th:text="${message}"></p>
+  </div>
+
+  <form class="main__form reg__form" action="/registration" method="post">
+    <div class="left__block">
+      <input class="form__input reg__input" required type="text" name="name" placeholder="Введите Имя">
+      <input class="form__input reg__input" required type="text" name="surname" placeholder="Введите Фамилию">
+      <input class="form__input reg__input" required type="text" name="patronymic" placeholder="Введите Отчество">
+      <input class="form__input reg__input" required type="text" name="address" placeholder="Введите адрес жительства">
+    </div>
+
+    <div class="right__block">
+      <input class="form__input reg__input" required type="text" name="username" placeholder="Введите логин">
+      <input class="form__input reg__input" required type="text" name="password" placeholder="Введите пароль">
+      <input class="form__input reg__input" required type="email" name="email" placeholder="Введите адрес электроной почты">
+      <input class="form__input reg__input" required type="date" name="dateOfBirth" placeholder="Введите дату рождения">
+    </div>
+
+    <input class="form__input" required type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+    <button class="button" type="submit">Зарегистрироваться</button>
+  </form>
+
+  <div class="reg_ref">
+    <a href="/">Вернуться назад</a>
+  </div>
+<!--  <form th:action="@{/logout}" method="post">-->
+<!--    <input type="submit" value="Sign Out"/>-->
+<!--  </form>-->
+</div>
+
+</body>
+</html>
