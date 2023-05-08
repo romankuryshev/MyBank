@@ -135,6 +135,7 @@
             <button th:if="${not admin}" th:attr="onclick=|openDep(${deposit.term}, ${deposit.depositId})|"
                     type="button" data-bs-toggle="modal" th:data-bs-target="'#submitDeposit' + ${deposit.depositId}" class="btn btn-primary">Открыть</button>
             <a th:if="${admin}" th:href="'/deposits/' + ${deposit.getDepositId()}" class="btn btn-primary">Изменить</a>
+            <button th:if="${admin}" type="button" data-bs-toggle="modal" th:data-bs-target="'#hideDeposit' + ${deposit.depositId}" class="btn btn-secondary">Скрыть</button>
         </div>
         <!-- Модальное окно -->
         <div class="modal fade" th:id="'submitDeposit' + ${deposit.depositId}" tabindex="-1" aria-labelledby="submitDeposit" aria-hidden="true">
@@ -172,6 +173,29 @@
             </div>
         </div>
         <!-- Модальное окно конец-->
+        <!-- Модальное окно скрыть депозит начало-->
+        <div class="modal fade" th:id="'hideDeposit' + ${deposit.depositId}" tabindex="-1" aria-labelledby="hideDeposit" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="hideDepositLabel">Удаление вклада</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h3>Вы действительно хотите скрыть этот вклад?</h3>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Назад</button>
+                        <form method="post" action="/deposits/delete">
+                            <input type="hidden" name="depositId" th:value="${deposit.depositId}">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                            <button type="submit" class="btn btn-primary">Скрыть</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Модальное окно скрыть депозит начало-->
     </div>
 
     <!--начало администратора-->

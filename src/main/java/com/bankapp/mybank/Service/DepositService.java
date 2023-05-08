@@ -23,15 +23,24 @@ public class DepositService {
     }
 
     public List<DepositInfo> getAllDeposits(){
-        return depInfRepo.findAll();
+        return depInfRepo.findDepositInfoByActive(true);
     }
 
     public void addNewDepositInfo(DepositInfo depositInfo){
+        depositInfo.setActive(true);
         depInfRepo.save(depositInfo);
     }
 
+    public void hideDeposit(Long depositId){
+        DepositInfo deposit = depInfRepo.findDepositInfoByDepositId(depositId);
+        deposit.setActive(false);
+        depInfRepo.save(deposit);
+    }
+
+
     public void updateDeposit(Long depositId , DepositInfo depositInfo){
         DepositInfo oldDepositInfo = depInfRepo.findDepositInfoByDepositId(depositId);
+        depositInfo.setActive(true);
         oldDepositInfo = depositInfo;
         depInfRepo.save(oldDepositInfo);
     }

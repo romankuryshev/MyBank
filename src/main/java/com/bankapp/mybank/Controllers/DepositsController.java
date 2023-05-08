@@ -40,6 +40,13 @@ public class DepositsController {
         return "redirect:/deposits";
     }
 
+    @PostMapping("/delete")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public String hideDeposit(Long depositId){
+        depositService.hideDeposit(depositId);
+        return "redirect:/deposits";
+    }
+
     @GetMapping("/{depositInfo}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public String editDeposit(@PathVariable DepositInfo depositInfo, Model model){

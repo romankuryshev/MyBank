@@ -28,6 +28,7 @@ public class DepositInfo {
     private float percent;
     private int minSum;
     private int maxSum;
+    private Boolean active;
 
     public Long getDepositId() {
         return depositId;
@@ -90,5 +91,13 @@ public class DepositInfo {
 
     public void setMaxSum(int maxSum) {
         this.maxSum = maxSum;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }
