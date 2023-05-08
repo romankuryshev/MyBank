@@ -81,10 +81,38 @@
                         <span class="card-price" th:text="${card.price} + ' ₽'"></span>
                         <span>/мес</span>
                     </div>
-                    <a class="btn btn-primary mr-2" th:href="@{cards/{id}(id=${card.cardId})}"> Изменить </a>
+                    <div>
+                        <a class="btn btn-primary mr-2" th:href="@{cards/{id}(id=${card.cardId})}"> Изменить </a>
+                        <button type="button" data-bs-toggle="modal" th:data-bs-target="'#hideCard' + ${card.cardId}" class="btn btn-secondary">Скрыть</button>
+                    </div>
                 </div>
             </div>
+
+            <!-- Модальное окно скрыть кредит начало-->
+            <div class="modal fade" th:id="'hideCard' + ${card.cardId}" tabindex="-1" aria-labelledby="hideCard" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="hideCardLabel">Удаление карты</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <h3>Вы действительно хотите скрыть эту карту?</h3>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Назад</button>
+                            <form method="post" action="/cards/delete">
+                                <input type="hidden" name="cardId" th:value="${card.cardId}">
+                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                <button type="submit" class="btn btn-primary">Скрыть</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Модальное окно скрыть кредит начало-->
         </div>
+
         <div class="card my-2 mx-3 shadow-sm" style="width: 30%">
             <div class="card-header ">
                 Добавить новую карту
@@ -101,62 +129,6 @@
         </div>
     </div>
 </div>
-
-
-
-
-
-<!--<section class="main__section">-->
-<!--    <div class="container">-->
-<!--        <div class="cards__wrapper">-->
-<!--            <h1 class="cards__title"> Доступные карты </h1>-->
-<!--            <div class="cards">-->
-<!--                <div class="card__info" th:each="card : ${cardsInfo}">-->
-<!--                    <div class="left__content">-->
-<!--                        <span class="left-first-el" th:text="${card.name}"></span>-->
-<!--                        <span class="left-second-el">-->
-<!--                <span class="card-price" th:text="${card.price} + ' ₽'"></span>-->
-<!--                <span>/мес</span>-->
-<!--              </span>-->
-<!--                        &lt;!&ndash;              <p class="row-first-el" th:text="'ID: ' + ${card.cardId}"></p>&ndash;&gt;-->
-<!--                    </div>-->
-<!--                    <div class="right__content">-->
-<!--                        <span class="right-first-el" th:text="'Описание: ' + ${card.description}"></span>-->
-<!--                        <a class="my-btn" th:href="@{cards/{id}(id=${card.cardId})}"> Изменить </a>-->
-<!--                    </div>-->
-<!--                </div>-->
-
-<!--            </div>-->
-<!--            <div class="new__card">-->
-<!--                <form action="/cards" method="post">-->
-<!--                    <div class="new__card__fields">-->
-<!--                        <div class="new__card__inputs">-->
-
-<!--                            <label>Название карты</label>-->
-<!--                            <input id="price" class="new__card__input" type="text" required name="name" placeholder="">-->
-
-<!--                            <label>Стоимость</label>-->
-<!--                            <input class="new__card__input" type="text" required name="price" placeholder="">-->
-
-<!--                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>-->
-<!--                        </div>-->
-
-<!--                        <div class="new__card__inputs">-->
-<!--                            <label>Описание</label>-->
-<!--                            <textarea class="new__card__input" rows="4" cols="40" name="description"-->
-<!--                                      placeholder=""></textarea>-->
-<!--                        </div>-->
-
-<!--                    </div>-->
-<!--                    <div class="new__card__button">-->
-<!--                        <button class="button" type="submit">Создать новую карту</button>-->
-<!--                    </div>-->
-<!--                </form>-->
-<!--            </div>-->
-<!--        </div>-->
-
-<!--    </div>-->
-<!--</section>-->
 
 </body>
 </html>

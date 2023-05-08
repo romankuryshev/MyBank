@@ -39,16 +39,6 @@ public class CardsController {
             return "clientCards";
     }
 
-//    @GetMapping("/orderingCard/{card}")
-//    public String orderCard(@PathVariable DebitCardInfo card,
-//                            @AuthenticationPrincipal User currentUser,
-//                            Model model){
-//        model.addAttribute("card", card);
-//        model.addAttribute("user", currentUser);
-//        return "orderingCard";
-//    }
-
-
     @PostMapping("/orderingCard/submit")
     @PreAuthorize("hasAuthority('USER')")
     public String submitOrderCard(@RequestParam DebitCardInfo cardInfo,
@@ -89,5 +79,12 @@ public class CardsController {
                              Model model){
         cardService.addInfoCard(card);
         return "redirect:/cards";
+    }
+
+    @PostMapping("/delete")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public String hideInfoCard(Integer cardId){
+        cardService.hideInfoCard(cardId);
+        return  "redirect:/cards";
     }
 }

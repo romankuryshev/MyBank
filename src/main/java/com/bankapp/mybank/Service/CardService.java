@@ -23,7 +23,7 @@ public class CardService {
     }
 
     public List<DebitCardInfo> getInfoAboutAllCards() {
-        return cardsInfoRepository.findAll();
+        return cardsInfoRepository.findDebitCardInfoByActive(true);
     }
 
     public void addUserCard(User user, DebitCardInfo card /*, String password*/) {
@@ -57,6 +57,13 @@ public class CardService {
     }
 
     public void addInfoCard(DebitCardInfo card) {
+        card.setActive(true);
+        cardsInfoRepository.save(card);
+    }
+
+    public void hideInfoCard(Integer cardId){
+        DebitCardInfo card = cardsInfoRepository.findDebitCardInfoByCardId(cardId);
+        card.setActive(false);
         cardsInfoRepository.save(card);
     }
 

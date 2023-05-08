@@ -16,6 +16,7 @@ public class DebitCardInfo {
     private Double price;
     private Double cashBackPercent;
     private Double operationsLimit;
+    private Boolean active;
 
     public DebitCardInfo(){
 
@@ -73,5 +74,13 @@ public class DebitCardInfo {
 
     public void setOperationsLimit(Double operationsLimit) {
         this.operationsLimit = operationsLimit;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }
