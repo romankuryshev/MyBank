@@ -27,7 +27,6 @@ public class DepositService {
     }
 
     public void addNewDepositInfo(DepositInfo depositInfo){
-        System.out.println(depositInfo.getTerm());
         depInfRepo.save(depositInfo);
     }
 

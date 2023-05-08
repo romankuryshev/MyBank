@@ -57,7 +57,156 @@
         </div>
     </div>
 
-    <form th:if="${admin}" class="card mx-5 my-2 box__shadow" method="post" action="/deposits">
+
+    <div th:each="credit : ${creditsInfo}" class="card mx-5 my-3 shadow-sm">
+        <h2 class="card-header" th:text="${credit.name}"></h2>
+        <div class="card-body">
+            <div class="d-flex justify-content-between">
+                <div class="w-50 mb-3">
+                    <p class="card-text fs-5 text-secondary-emphasis fw-light"
+                       th:text="${credit.description}"></p>
+                </div>
+                <div class="d-flex w-50 justify-content-evenly my-2">
+                    <div>
+                        <h4 class="mb-0">
+                            <span class="card-text fs-3" th:text="${credit.creditPercent}"></span> %
+                        </h4>
+                        <span class="my-0 fs-6 fw-light text-body-secondary">Процент</span>
+                    </div>
+                    <div>
+                        <h4 class="mb-0 ">от <span class="card-text fs-3" th:text="${credit.minSum}"></span> ₽</h4>
+                        <span class="my-0 fs-6 fw-light text-body-secondary">сумма кредита</span>
+                    </div>
+                    <div>
+                        <h4 class="mb-0 pe-0">от <span class="card-text fs-3" th:text="${credit.term.get(0)}"></span>
+                            <span th:switch="${credit.term.get(0)}">
+                                <span th:case="1"> года</span>
+                                <span th:case="*"> лет</span>
+                            </span>
+                        </h4>
+                        <span class="my-0 fs-6 fw-light text-body-secondary">на срок</span>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-around border-bottom mb-2 p-2">
+                <div>
+                    <div class="">
+                        <label th:for="'creditSum' + ${credit.creditId}"
+                               class="form-label fs-6 fw-light fst-italic text-body-secondary mb-0"> Какую сумму вы хотите получить</label>
+                        <input th:id="'creditSum' + ${credit.creditId}"
+                               th:attr="onchange=|calc(${credit.term}, ${credit.creditId}, '${credit.creditPercent}')|"
+                               th:value="${credit.minSum}"
+                               type="text"
+                               class="form-control"
+                               aria-label="Sizing example input"
+                               aria-describedby="inputGroup-sizing-sm"
+                               th:max="${credit.maxSum}"
+                               oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                        <!--                    <span style="left: 72px;">₽</span>-->
+                    </div>
+                </div>
+
+                <div style="min-width: 30%; max-width: 50%">
+                    <div class="d-flex justify-content-between">
+                        <span th:each="term : ${credit.getTerm()}"
+                               th:for="'period' + ${credit.creditId}"
+                               class="form-label fs-6 fw-light fst-italic text-body-secondary">
+                            <span th:switch="${term}">
+                                <span th:text="${term} + ' год'" th:case="1"></span>
+                                <span th:text="${term} + ' года'" th:case="2"></span>
+                                <span th:text="${term} + ' года'" th:case="3"></span>
+                                <span th:text="${term} + ' года'" th:case="4"></span>
+                                <span th:text="${term} + ' лет'" th:case="5"></span>
+                                <span th:text="${term} + ' лет'" th:case="6"></span>
+                            </span>
+                        </span>
+                    </div>
+                    <input th:id="'period' + ${credit.creditId}" type="range"
+                           th:attr="onclick=|calc(${credit.term}, ${credit.creditId}, '${credit.creditPercent}')|"
+                           class="form-range" min="0" th:max="${credit.getTerm().size()} - 1" step="1">
+                </div>
+
+                <div style="width: 15%">
+                    <span class="fs-6 fw-light text-body-secondary">Ежемесячный платеж</span>
+                    <h3>
+                        <span th:id="'result' + ${credit.creditId}"></span>
+                        <span> ₽</span>
+                    </h3>
+                </div>
+                <script th:inline="javascript">
+                    window.addEventListener('load', () => {
+                        calc([[${credit.term}]], [[${credit.creditId}]], [[${credit.creditPercent}]]);
+                    });
+                </script>
+            </div>
+            <button th:if="${not admin}" th:attr="onclick=|openDep(${credit.term}, ${credit.creditId})|"
+                    type="button" data-bs-toggle="modal" th:data-bs-target="'#submitCredit' + ${credit.creditId}" class="btn btn-primary">Открыть</button>
+            <a th:if="${admin}" th:href="'/credits/' + ${credit.creditId}" class="btn btn-primary">Изменить</a>
+            <button th:if="${admin}" type="button" data-bs-toggle="modal" th:data-bs-target="'#hideCredit' + ${credit.creditId}" class="btn btn-secondary">Скрыть</button>
+        </div>
+        <!-- Модальное окно -->
+        <div class="modal fade" th:id="'submitCredit' + ${credit.creditId}" tabindex="-1" aria-labelledby="submitCredit" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="submitDepositLabel">Открыть кредит</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h3 th:text="${credit.name}"></h3>
+
+                        <h6 class="card-text">
+                            <span class="fs-6 fw-light fst-italic text-body-secondary mb-0">На срок:</span>
+                            <span th:id="'creditTerm' + ${credit.creditId}"></span>
+                            <span>  лет </span>
+                        </h6>
+
+                        <h6 class="card-text">
+                            <span class="fs-6 fw-light fst-italic text-body-secondary mb-0">Процентная ставка: </span>
+                            <span th:text="${credit.creditPercent} + ' '"></span>
+                            <span>%</span>
+                        </h6>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Назад</button>
+                        <form method="post" action="/credits/open">
+                            <input type="hidden" name="period" th:id="'formTerm' + ${credit.creditId}" />
+                            <input type="hidden" name="creditInfo" th:value="${credit.creditId}"/>
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                            <button type="submit" class="btn btn-primary">Открыть</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Модальное окно конец-->
+        <!-- Модальное окно скрыть кредит начало-->
+        <div class="modal fade" th:id="'hideCredit' + ${credit.creditId}" tabindex="-1" aria-labelledby="hideCredit" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="submitCreditLabel">Удаление кредита</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h3>Вы действительно хотите скрыть этот кредит?</h3>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Назад</button>
+                            <form method="post" action="/credits/delete">
+                            <input type="hidden" name="creditId" th:value="${credit.creditId}">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                            <button type="submit" class="btn btn-primary">Скрыть</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Модальное окно скрыть кредит начало-->
+    </div>
+
+<!--    начало администратор-->
+    <form th:if="${admin}" class="card mx-5 my-2 shadow-sm" method="post" action="/credits/addCredit">
         <div class="input-group input-group-lg">
             <span class="input-group-text" id="inputGroup-sizing-lg">Название</span>
             <input name="name" required type="text" class="form-control" aria-label="Sizing example input"
@@ -76,7 +225,7 @@
                         <option value="3">3 года</option>
                         <option value="4">4 года</option>
                         <option value="5">5 лет</option>
-                        <option value="5">6 лет</option>
+                        <option value="6">6 лет</option>
                     </select>
                 </div>
                 <div class="p-1 w-50">
@@ -97,7 +246,7 @@
 
                     <div class="input-group mb-3">
                         <span class="input-group-text">Процентная ставка</span>
-                        <input name="percent" required type="text" class="form-control" aria-label="Sizing example input"
+                        <input name="creditPercent" required type="text" class="form-control" aria-label="Sizing example input"
                                aria-describedby="inputGroup-sizing-default"
                                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"/>
                     </div>
@@ -107,8 +256,31 @@
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
         </div>
     </form>
-
+    <!--  конец администратор-->
 </div>
-
-
 </body>
+<script th:inline="javascript">
+    function calc(arr, id, perc) {
+        var sum = document.getElementById("creditSum" + id).value;
+        var per = document.getElementById("period" + id).value;
+        var answer = document.getElementById("result" + id);
+
+        var tempSum = 0;
+        for(let i = 1; i <= arr[per] * 12; i++){
+            tempSum += Math.pow(1 + (perc * 0.01 / 12), i);
+        }
+
+        answer.innerText = Math.floor(sum * Math.pow(1 + (perc * 0.01 / 12), arr[per]*12) / tempSum);
+        console.log(answer.value);
+        console.log(arr);
+    }
+</script>
+<script>
+    function openDep(arr, id){
+        var per = document.getElementById("period" + id).value;
+        var depTerm = document.getElementById("depTerm" + id);
+        var formTerm = document.getElementById("formTerm" + id);
+        formTerm.value = arr[per];
+        depTerm.innerText = arr[per];
+    }
+</script>

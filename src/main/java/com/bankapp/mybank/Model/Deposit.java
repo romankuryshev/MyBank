@@ -24,7 +24,7 @@ public class Deposit {
     private double minBalance;
     private boolean isActive;
     private boolean isFirstOpen;
-    private  Integer period;
+    private Integer period;
     private Float percent;
 
     public Deposit(){}

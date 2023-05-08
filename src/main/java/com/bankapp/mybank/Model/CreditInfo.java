@@ -16,12 +16,11 @@ public class CreditInfo {
     @CollectionTable(name = "credit_terms", joinColumns = @JoinColumn(name = "credit_id"))
     private List<Integer> term;
 
-    @ElementCollection(targetClass = Double.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "creditSums", joinColumns = @JoinColumn(name = "credit_id"))
-    private List<Double> sum;
-
+    private Integer minSum;
+    private Integer maxSum;
     private String description;
     private String name;
+    private Boolean active;
 
     public Long getCreditId() {
         return creditId;
@@ -47,12 +46,20 @@ public class CreditInfo {
         this.term = term;
     }
 
-    public List<Double> getSum() {
-        return sum;
+    public Integer getMinSum() {
+        return minSum;
     }
 
-    public void setSum(List<Double> sum) {
-        this.sum = sum;
+    public void setMinSum(Integer minSum) {
+        this.minSum = minSum;
+    }
+
+    public Integer getMaxSum() {
+        return maxSum;
+    }
+
+    public void setMaxSum(Integer maxSum) {
+        this.maxSum = maxSum;
     }
 
     public String getDescription() {
@@ -69,5 +76,13 @@ public class CreditInfo {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }
