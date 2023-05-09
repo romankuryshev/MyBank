@@ -1,10 +1,9 @@
 package com.bankapp.mybank.Controllers;
 
-import com.bankapp.mybank.Model.CreditInfo;
-import com.bankapp.mybank.Model.DepositInfo;
-import com.bankapp.mybank.Model.Role;
-import com.bankapp.mybank.Model.User;
+import com.bankapp.mybank.Model.*;
+import com.bankapp.mybank.Service.CardService;
 import com.bankapp.mybank.Service.CreditService;
+import com.bankapp.mybank.Service.LkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,10 +19,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class CreditController {
 
     private final CreditService creditService;
+    private final LkService lkService;
 
     @Autowired
-    public CreditController(CreditService creditService) {
+    public CreditController(CreditService creditService, LkService lkService) {
         this.creditService = creditService;
+        this.lkService = lkService;
     }
 
     @GetMapping("")
@@ -34,6 +35,9 @@ public class CreditController {
 
         model.addAttribute("user", currentUser);
         model.addAttribute("creditsInfo", creditService.getAllCredits());
+        if(currentUser != null){
+            model.addAttribute("userCards", lkService.getUserCards(currentUser));
+        }
 
         return "credits";
     }
@@ -67,6 +71,20 @@ public class CreditController {
         creditService.updateCredit(creditId, creditInfo);
         return "redirect:/credits";
     }
+
+    @PostMapping("/open")
+    @PreAuthorize("hasAuthority('USER')")
+    public String openCredit(@AuthenticationPrincipal User user,
+                             String cardNumber,
+                             Long creditId,
+                             Double sum,
+                             Integer period){
+
+        creditService.addCreditStatement(creditId, user, cardNumber, sum, period);
+        return "redirect:/credits";
+    }
+
+
 
 
 }

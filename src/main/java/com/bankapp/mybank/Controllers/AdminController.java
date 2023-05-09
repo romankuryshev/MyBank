@@ -1,5 +1,6 @@
 package com.bankapp.mybank.Controllers;
 
+import com.bankapp.mybank.Model.CreditStatement;
 import com.bankapp.mybank.Model.UpdateType;
 import com.bankapp.mybank.Model.User;
 import com.bankapp.mybank.Service.AdminService;
@@ -34,6 +35,7 @@ public class AdminController {
         model.addAttribute("cardsUpdate", adminService.getLastUpdate(UpdateType.CARD));
         model.addAttribute("depositsUpdate", adminService.getLastUpdate(UpdateType.DEPOSIT));
 //        model.addAttribute("creditsUpdate")
+        model.addAttribute("creditStatements", adminService.getAllExpectsCreditStatements());
         return "controlPanel";
     }
 
@@ -42,6 +44,14 @@ public class AdminController {
     public String doUpdate(@RequestParam UpdateType updateType){
 
         adminService.doUpdate(updateType);
+        return "redirect:/admin/control-panel";
+    }
+
+    @PostMapping("/control-panel/action-statement")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public String actionStatement(String act,
+                                  Long creditStatementId) {
+        adminService.actionStatement(creditStatementId, act);
         return "redirect:/admin/control-panel";
     }
 

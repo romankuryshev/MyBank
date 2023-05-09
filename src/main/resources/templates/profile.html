@@ -350,7 +350,6 @@
                             </div>
                             <!--модальное окно выбора карты для пополнения вклада конец-->
 
-
                             <!--модальное окно выбора карты для перевода вклада-->
                             <div class="modal fade" th:id="'chooseDepositTransf' + ${deposit.depId}" tabindex="-1"
                                  aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -402,8 +401,7 @@
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                                 Назад
                                             </button>
-                                            <input type="hidden" th:name="${_csrf.parameterName}"
-                                                   th:value="${_csrf.token}"/>
+                                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                                             <input type="hidden" name="depositId" th:value="${deposit.depId}">
                                             <button type="submit" class="btn btn-primary">Подтвердить</button>
                                         </div>

@@ -87,6 +87,35 @@
 
     <div class="my-3" >
         <h2 class="display-6" >Заявки на кредиты </h2>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">First</th>
+                <th scope="col">Last</th>
+                <th scope="col">Handle</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="statement : ${creditStatements}">
+                <th scope="row" th:text="${statement.credit.credId}"></th>
+                <td th:text="${statement.credit.user.username}"></td>
+                <td th:text="${statement.credit.creditInfo.creditId}"></td>
+                <td th:text="${statement.credit.creditInfo.name}"></td>
+                <td th:text="${statement.credit.creditInfo.creditPercent}"></td>
+                <td th:text="${statement.period}"></td>
+                <td th:text="${statement.credit.sum}"></td>
+                <td>
+                    <form method="post" action="/admin/control-panel/action-statement">
+                        <input type="hidden" name="creditStatementId" th:value="${statement.creditStatementId}">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <button type="submit" name="act" class="btn btn-primary" th:value="APPROVE">Одобрить</button>
+                        <button type="submit" name="act" class="btn btn-primary" th:value="REJECT">Отклонить</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 
 </div>

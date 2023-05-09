@@ -1,16 +1,18 @@
 package com.bankapp.mybank.Service;
 
+import com.bankapp.mybank.Enums.CreditStatementType;
+import com.bankapp.mybank.Model.Credit;
+import com.bankapp.mybank.Model.CreditStatement;
 import com.bankapp.mybank.Model.UpdateInfo;
 import com.bankapp.mybank.Model.UpdateType;
-import com.bankapp.mybank.Repository.CardsRepository;
-import com.bankapp.mybank.Repository.DepositRepository;
-import com.bankapp.mybank.Repository.UpdateInfoRepository;
+import com.bankapp.mybank.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Locale;
 
 @Service
@@ -18,12 +20,16 @@ public class AdminService {
     private final UpdateInfoRepository updateInfoRepository;
     private final CardsRepository cardsRepository;
     private final DepositRepository depositRepository;
+    private final CreditStatementRepository creditStatementRepository;
+    private final CreditRepository creditRepository;
 
     @Autowired
-    public AdminService(UpdateInfoRepository updateInfoRepository, CardsRepository cardsRepository, DepositRepository depositRepository) {
+    public AdminService(UpdateInfoRepository updateInfoRepository, CardsRepository cardsRepository, DepositRepository depositRepository, CreditStatementRepository creditStatementRepository, CreditRepository creditRepository) {
         this.updateInfoRepository = updateInfoRepository;
         this.cardsRepository = cardsRepository;
         this.depositRepository = depositRepository;
+        this.creditStatementRepository = creditStatementRepository;
+        this.creditRepository = creditRepository;
     }
 
     public void doUpdate(UpdateType updateType){
@@ -56,12 +62,51 @@ public class AdminService {
         }
     }
 
+    public List<CreditStatement> getAllExpectsCreditStatements(){
+        return creditStatementRepository.findCreditStatementsByCreditStatementType(CreditStatementType.EXPECTS);
+    }
+
+    public void actionStatement(Long creditStatementId, String action){
+        CreditStatement creditStatement = creditStatementRepository.findCreditStatementsByCreditStatementId(creditStatementId);
+        Credit credit = creditRepository.findCreditByCredId(creditStatement.getCredit().getCredId());
+        if(action.equals("APPROVE")){
+            creditStatement.setCreditStatementType(CreditStatementType.APPROVED);
+            LocalDate today = LocalDate.now();
+            credit.setStartDate(today);
+            credit.setPeriod(creditStatement.getPeriod());
+            credit.setEndDate(today.plusYears(credit.getPeriod()));
+            credit.setNexUpdateDate(today.plusMonths(1));
+            credit.setPaid(true);
+            credit.setActive(true);
+            credit.getDebitCard().setBalance(credit.getSum());
+
+            Double tempSum = 0.0;
+            Double monthPercent = 1 + credit.getCreditInfo().getCreditPercent() * 0.01 / 12;
+            for(int i = 0; i < credit.getPeriod() * 12; i++){
+                tempSum += Math.pow(monthPercent, i);
+            }
+
+            Double nextPayment = Math.floor(credit.getSum() * Math.pow(monthPercent, credit.getPeriod() * 12  - 1) / tempSum);
+            credit.setNextPayment(nextPayment);
+
+            creditStatementRepository.save(creditStatement);
+            creditRepository.save(credit);
+
+        } else if(action.equals("REJECT")){
+            creditStatement.setCreditStatementType(CreditStatementType.REJECTED);
+            credit.setActive(false);
+
+            creditStatementRepository.save(creditStatement);
+            creditRepository.save(credit);
+        } else return;
+    }
     public LocalDate getLastUpdate(UpdateType updateType){
         UpdateInfo info = updateInfoRepository.getUpdateInfoByUpdateType(updateType);
         if(info != null)
             return info.getUpdateDate();
         else return null;
     }
+
     public void updateDeposits(LocalDate today, DecimalFormat decimalFormat){
         for(var deposit : depositRepository.findAll()){
             if(!deposit.isActive())
