@@ -106,13 +106,14 @@ public class CardService {
 
         for(int i = 0; i < number.length(); i++){
             if(i % 2 == 0){
-                int temp = ((int) number.charAt(i)) * 2;
+                int temp = (((int) number.charAt(i)) - '0') * 2;
                 if( temp > 9) temp -= 9;
                 sum += temp;
-            } else sum += number.charAt(i);
+            } else sum += number.charAt(i) - '0';
         }
 
-        return sum % 10 == 0;
+        if (sum % 10 == 0) return true;
+        else return false;
     }
 
 }

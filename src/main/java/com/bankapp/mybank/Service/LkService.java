@@ -79,13 +79,17 @@ public class LkService {
 
     public String doTransfer(User currentUser, String currentCard,
                               Double amount, String cardNumberRecipient) {
+
+        if (!CardService.isLuhn(cardNumberRecipient))
+            return "Неправильно указан номер карты.";
+
         DebitCard inputCard = cardsRepository.findByCardNumber(currentCard);
         DecimalFormat decimalFormat = new DecimalFormat( "#.##", new DecimalFormatSymbols(Locale.US));
         if (inputCard != null && inputCard.getUser().getUserId().equals(currentUser.getUserId())) {
 
             DebitCard recipientCard = cardsRepository.findByCardNumber(cardNumberRecipient);
             if (recipientCard == null || !recipientCard.getActive()) {
-                return "Неверный номер карты.";
+                return "Неправильно указан номер карты";
             }
 
             if (inputCard.getBalance() < amount) {
