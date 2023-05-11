@@ -27,19 +27,22 @@ public class Credit {
     private LocalDate nexUpdateDate;
     private Integer period;
     private Double sum;
+    private Double balance;
+    private Double payment;
     private Double nextPayment;
     private Boolean isPaid;
-
     private Boolean active;
+    private Double percent;
     public Credit() {
 
     }
 
-    public Credit(CreditInfo creditInfo, User user, DebitCard debitCard, Double sum) {
+    public Credit(CreditInfo creditInfo, User user, DebitCard debitCard, Double sum, Boolean active) {
         this.creditInfo = creditInfo;
         this.user = user;
         this.debitCard = debitCard;
         this.sum = sum;
+        this.active = active;
     }
 
     public Credit(CreditInfo creditInfo, User user, DebitCard debitCard, LocalDate startDate, LocalDate endDate, LocalDate nexUpdateDate, Double sum, Double nextPayment, Boolean isPaid) {
@@ -148,5 +151,29 @@ public class Credit {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public Double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Double balance) {
+        this.balance = balance;
+    }
+
+    public Double getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Double payment) {
+        this.payment = payment;
+    }
+
+    public Double getPercent() {
+        return percent;
+    }
+
+    public void setPercent(Double percent) {
+        this.percent = percent;
     }
 }

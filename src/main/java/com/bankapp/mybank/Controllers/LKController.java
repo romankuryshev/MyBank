@@ -33,6 +33,7 @@ public class LKController {
         }
         model.addAttribute("userCards", lkService.getUserCards(currentUser));
         model.addAttribute("userDeposits", lkService.getUserDeposits(currentUser));
+        model.addAttribute("userCredits", lkService.getUserCredits(currentUser));
         return "profile";
     }
 

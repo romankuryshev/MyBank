@@ -1,9 +1,11 @@
 package com.bankapp.mybank.Service;
 
+import com.bankapp.mybank.Model.Credit;
 import com.bankapp.mybank.Model.DebitCard;
 import com.bankapp.mybank.Model.Deposit;
 import com.bankapp.mybank.Model.User;
 import com.bankapp.mybank.Repository.CardsRepository;
+import com.bankapp.mybank.Repository.CreditRepository;
 import com.bankapp.mybank.Repository.DepositRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,11 +24,13 @@ public class LkService {
 
     private final CardsRepository cardsRepository;
     private final DepositRepository depositRepository;
+    private final CreditRepository creditRepository;
 
     @Autowired
-    public LkService(CardsRepository cardsRepository, DepositRepository depositRepository) {
+    public LkService(CardsRepository cardsRepository, DepositRepository depositRepository, CreditRepository creditRepository) {
         this.cardsRepository = cardsRepository;
         this.depositRepository = depositRepository;
+        this.creditRepository = creditRepository;
     }
 
     public List<DebitCard> getUserCards(User user) {
@@ -39,9 +43,19 @@ public class LkService {
         return deposits.stream().filter(Deposit::isActive).sorted(Comparator.comparing(Deposit::getDepId)).collect(Collectors.toList());
     }
 
+    public List<Credit> getUserCredits(User user){
+        List<Credit> credits = new ArrayList<>(creditRepository.findAllCreditsByUser(user));
+        System.out.println(credits);
+        return credits.stream().filter(Credit::getActive).sorted(Comparator.comparing(Credit::getCredId)).collect(Collectors.toList());
+    }
+
     public String deleteUserCard(User user, String card){
+
         DebitCard debitCard = cardsRepository.findByCardNumber(card);
         if(debitCard == null)
+            return "Ошибка.";
+
+        if(creditRepository.findCreditByDebitCard(debitCard) != null)
             return "Ошибка.";
 
         if(debitCard.getBalance() != 0.0)

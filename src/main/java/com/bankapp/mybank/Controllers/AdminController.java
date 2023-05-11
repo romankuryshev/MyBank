@@ -1,6 +1,5 @@
 package com.bankapp.mybank.Controllers;
 
-import com.bankapp.mybank.Model.CreditStatement;
 import com.bankapp.mybank.Model.UpdateType;
 import com.bankapp.mybank.Model.User;
 import com.bankapp.mybank.Service.AdminService;
@@ -34,7 +33,7 @@ public class AdminController {
         model.addAttribute("user", user);
         model.addAttribute("cardsUpdate", adminService.getLastUpdate(UpdateType.CARD));
         model.addAttribute("depositsUpdate", adminService.getLastUpdate(UpdateType.DEPOSIT));
-//        model.addAttribute("creditsUpdate")
+        model.addAttribute("creditsUpdate", adminService.getLastUpdate(UpdateType.CREDIT));
         model.addAttribute("creditStatements", adminService.getAllExpectsCreditStatements());
         return "controlPanel";
     }
