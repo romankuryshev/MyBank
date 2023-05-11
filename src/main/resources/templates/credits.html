@@ -102,6 +102,7 @@
                                aria-describedby="inputGroup-sizing-sm"
                                th:max="${credit.maxSum}"
                                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                        <span class="form-label fs-6 fw-light fst-italic text-body-secondary mb-0">Максимум <span th:text="' ' + ${credit.maxSum}"></span> </span>
                         <!--                    <span style="left: 72px;">₽</span>-->
                     </div>
                 </div>
@@ -220,8 +221,6 @@
             </div>
         </div>
         <!--модальное окно выбора карты для пополнения вклада конец-->
-
-
 
 
 
