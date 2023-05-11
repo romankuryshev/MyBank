@@ -17,6 +17,7 @@ public class DebitCardInfo {
     private Double cashBackPercent;
     private Double operationsLimit;
     private Boolean active;
+    private String bankProgramCode;
 
     public DebitCardInfo(){
 
@@ -26,6 +27,7 @@ public class DebitCardInfo {
         this.name = name;
         this.description = description;
         this.price = price;
+
     }
 
     public Integer getCardId() {
@@ -82,5 +84,13 @@ public class DebitCardInfo {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public String getBankProgramCode() {
+        return bankProgramCode;
+    }
+
+    public void setBankProgramCode(String bankProgramCode) {
+        this.bankProgramCode = bankProgramCode;
     }
 }

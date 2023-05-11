@@ -129,7 +129,7 @@
                                 <form th:id="${card.cardId}" action="/cards/orderingCard/submit" method="post">
                                     <input type="hidden" name="cardInfo" th:value="${card.cardId}"/>
                                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                                    <button type="submit" class="btn btn-primary">Открыть</button>
+                                    <button type="submit" class="btn btn-primary">Оформить</button>
                                 </form>
                             </div>
                         </div>
