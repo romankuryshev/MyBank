@@ -79,7 +79,7 @@
                     <dd class="col-sm-9" th:text="${depositsUpdate}"></dd>
 
                     <dt class="col-sm-3">Кредиты</dt>
-                    <dd class="col-sm-9">A description list is perfect for defining terms.</dd>
+                    <dd class="col-sm-9" th:text="${creditsUpdate}"></dd>
                 </dl>
             </div>
         </div>
@@ -90,10 +90,14 @@
         <table class="table">
             <thead>
             <tr>
-                <th scope="col">#</th>
-                <th scope="col">First</th>
-                <th scope="col">Last</th>
-                <th scope="col">Handle</th>
+                <th scope="col">ID заявки</th>
+                <th scope="col">Имя пользователя</th>
+                <th scope="col">ID Кредита</th>
+                <th scope="col">Название кредита</th>
+                <th scope="col">Процент</th>
+                <th scope="col">Срок</th>
+                <th scope="col">Сумма</th>
+                <th scope="col" colspan="2"></th>
             </tr>
             </thead>
             <tbody>
