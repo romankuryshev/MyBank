@@ -455,6 +455,26 @@
             </h2>
             <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse">
                 <div class="accordion-body">
+
+                    <div class="d-flex flex-wrap mx-4 mt-2 mb - 5">
+                        <div th:each="credit : ${userCredits}" class="card m-3 shadow-sm" style="width: 47%">
+                            <h5 th:text="${credit.creditInfo.name}" class="card-header"></h5>
+                            <div class="card-body">
+                                <h6 class="card-title">
+                                    Общая сумма <span th:text="${credit.sum} + ' ₽'" ></span>
+                                </h6>
+
+                                <div class="card-text">Следующее списание <span
+                                        th:text="${credit.nexUpdateDate}"></span>
+                                </div>
+                                <div class="card-text">Сумма списания: <span
+                                        th:text="${credit.nextPayment}"></span>
+                                </div>
+                                <div class="card-text">Действителен до <span th:text="${credit.endDate}"></span></div>
+                                <div class="card-text">Остаток <span th:text="${credit.balance}"></span></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
