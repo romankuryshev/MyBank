@@ -59,7 +59,6 @@ public class CreditService {
         }
     }
 
-
     public String addCreditStatement(Long creditId,
                                      User user,
                                      String cardNumber,
@@ -69,7 +68,7 @@ public class CreditService {
         DebitCard debitCard = cardsRepository.findByCardNumber(cardNumber);
         CreditInfo creditInfo = creditInfoRepository.findCreditInfoByCreditId(creditId);
 
-        Credit newCredit = new Credit(creditInfo, user, debitCard, sum);
+        Credit newCredit = new Credit(creditInfo, user, debitCard, sum, false);
         creditRepository.save(newCredit);
 
         CreditStatement creditStatement = new CreditStatement(newCredit, CreditStatementType.EXPECTS, period);
