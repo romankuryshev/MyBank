@@ -51,30 +51,26 @@
     </div>
 </nav>
 
-<h2 class="mx-4">Редактирование карт.</h2>
-<div>
-    <div class="card my-2 mx-3 box__shadow" style="width: 30%">
-        <div class="card-header ">
-            Редактировать
+<div class="container-lg d-flex justify-content-center align-items-center">
+    <div>
+        <h2 >Редактирование карт.</h2>
+        <div class="card my-2 shadow-sm">
+            <div class="card-header">
+                Редактировать
+            </div>
+            <form class="list-group list-group-flush width-fit-content" th:action="@{/cards/{id}(id=${card.cardId})}" method="post">
+                <input class="list-group-item" type="text" name="name" th:value="${card.name}" placeholder="Название" required>
+                <input class="list-group-item" type="text" name="price" th:value="${card.price}" placeholder="Стоимость">
+                <input class="list-group-item" type="text" name="cashBackPercent" th:value="${card.cashBackPercent}" placeholder="Кешбэк">
+                <input class="list-group-item" type="text" name="operationsLimit" th:value="${card.operationsLimit}" placeholder="Лимит на переводы">
+                <input class="list-group-item" type="text" maxlength="2" minlength="2" name="bankProgramCode" placeholder="Код" th:value="${card.bankProgramCode}" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                <textarea id="floatingTextarea" class="list-group-item w-100 " name="description" th:text="${card.description}" placeholder="Описание" style="width: 100%"></textarea>
+                <button class="btn btn-primary mx-5" type="submit">Сохранить</button>
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/> <!-- ???Здесь Не обязатальный-->
+            </form>
         </div>
-        <form class="list-group list-group-flush" th:action="@{/cards/{id}(id=${card.cardId})}" method="post">
-            <input class="list-group-item" type="text" name="name" th:value="${card.name}" placeholder="Название" required>
-            <input class="list-group-item" type="text" name="price" th:value="${card.price}" placeholder="Стоимость">
-            <input class="list-group-item" type="text" name="cashBackPercent" th:value="${card.cashBackPercent}" placeholder="Кешбэк">
-            <input class="list-group-item" type="text" name="operationsLimit" th:value="${card.operationsLimit}" placeholder="Лимит на переводы">
-            <textarea id="floatingTextarea" class="list-group-item w-100 " name="description" th:text="${card.description}" placeholder="Описание" style="width: 100%"></textarea>
-            <button class="btn btn-primary mx-5" type="submit">Сохранить</button>
-            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/> <!-- ???Здесь Не обязатальный-->
-        </form>
     </div>
-
 </div>
 
-<!--<form th:action="@{/cards/{id}(id=${card.cardId})}" method="post">-->
-<!--    <input type="text" name="name" th:value="${card.name}">-->
-<!--    <input type="text" name="description" th:value="${card.description}">-->
-<!--    <input type="text" name="price" th:value="${card.price}">-->
-<!--    <button type="submit">Сохранить</button>-->
-<!--</form>-->
 </body>
 </html>

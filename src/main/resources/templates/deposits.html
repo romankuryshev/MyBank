@@ -65,7 +65,8 @@
 
     <div th:each="deposit : ${depositsInfo}" class="card mx-5 my-3 shadow-sm">
         <h2 class="card-header" th:text="${deposit.getName()}"></h2>
-        <div class="card-body">
+        <div class="card-body" style="background: linear-gradient(180deg, #ffffff 0%, rgb(169, 198, 250) 100%)">
+
             <div class="d-flex justify-content-between">
                 <div class="w-50 mb-3">
                     <h3 class="card-title fw-normal" th:text="${deposit.getTitle()}"></h3>

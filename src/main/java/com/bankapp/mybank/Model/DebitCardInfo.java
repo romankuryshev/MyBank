@@ -23,11 +23,11 @@ public class DebitCardInfo {
 
     }
 
-    public DebitCardInfo(String name, String description, Double price) {
+    public DebitCardInfo(String name, String description, Double price, String bankProgramCode) {
         this.name = name;
         this.description = description;
         this.price = price;
-
+        this.bankProgramCode = bankProgramCode;
     }
 
     public Integer getCardId() {

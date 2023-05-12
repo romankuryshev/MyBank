@@ -60,7 +60,7 @@
 
     <div th:each="credit : ${creditsInfo}" class="card mx-5 my-3 shadow-sm">
         <h2 class="card-header" th:text="${credit.name}"></h2>
-        <div class="card-body">
+        <div class="card-body" style="background: linear-gradient(180deg, #ffffff 0%, rgb(169, 198, 250) 100%)">
             <div class="d-flex justify-content-between">
                 <div class="w-50 mb-3">
                     <p class="card-text fs-5 text-secondary-emphasis fw-light"
@@ -102,7 +102,7 @@
                                aria-describedby="inputGroup-sizing-sm"
                                th:max="${credit.maxSum}"
                                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
-                        <span class="form-label fs-6 fw-light fst-italic text-body-secondary mb-0">Максимум <span th:text="' ' + ${credit.maxSum}"></span> </span>
+                        <span class="form-label fs-6 fw-light fst-italic text-body-secondary mb-0">Максимум <span th:text="' ' + ${credit.maxSum} + ' ₽'"></span> </span>
                         <!--                    <span style="left: 72px;">₽</span>-->
                     </div>
                 </div>
