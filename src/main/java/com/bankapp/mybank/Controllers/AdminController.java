@@ -3,25 +3,25 @@ package com.bankapp.mybank.Controllers;
 import com.bankapp.mybank.Model.UpdateType;
 import com.bankapp.mybank.Model.User;
 import com.bankapp.mybank.Service.AdminService;
+import com.bankapp.mybank.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
 
     private final AdminService adminService;
+    private final UserService userService;
 
     @Autowired
-    public AdminController(AdminService adminService) {
+    public AdminController(AdminService adminService, UserService userService) {
         this.adminService = adminService;
+        this.userService = userService;
     }
 
     @GetMapping("/control-panel")
@@ -54,4 +54,9 @@ public class AdminController {
         return "redirect:/admin/control-panel";
     }
 
+    @GetMapping("/control-panel/userInfo/{userId}")
+    public String getUserInfo(@PathVariable Integer userId, Model model){
+        model.addAttribute("user", userService.getUserById(userId));
+        return "userInfo";
+    }
 }

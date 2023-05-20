@@ -103,7 +103,7 @@
             <tbody>
             <tr th:each="statement : ${creditStatements}">
                 <th scope="row" th:text="${statement.credit.credId}"></th>
-                <td th:text="${statement.credit.user.username}"></td>
+                <td><a th:text="${statement.credit.user.username}" th:href="'/admin/control-panel/userInfo/' + ${statement.credit.user.userId}"></a></td>
                 <td th:text="${statement.credit.creditInfo.creditId}"></td>
                 <td th:text="${statement.credit.creditInfo.name}"></td>
                 <td th:text="${statement.credit.creditInfo.creditPercent}"></td>
