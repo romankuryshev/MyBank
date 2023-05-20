@@ -464,6 +464,8 @@
                                     Общая сумма <span th:text="${credit.sum} + ' ₽'" ></span>
                                 </h6>
 
+                                <p class="warning" th:if="${!credit.getPaid()}" th:text="Не оплачен."></p>
+
                                 <div class="card-text">Следующее списание <span
                                         th:text="${credit.nexUpdateDate}"></span>
                                 </div>
