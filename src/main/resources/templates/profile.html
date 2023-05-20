@@ -283,9 +283,9 @@
                                         </button>
                                     </div>
 
-                                    <button th:id="'deleteDeposit' + 52 + 'button'" type="button"
+                                    <button th:id="'deleteDeposit' + ${deposit.depId} + 'button'" type="button"
                                             class="btn btn-secondary" data-bs-toggle="modal"
-                                            th:data-bs-target="'#deleteDeposit' + 52">
+                                            th:data-bs-target="'#deleteDeposit' + ${deposit.depId}">
                                         Закрыть
                                     </button>
                                 </div>
